@@ -24,8 +24,15 @@
                     {{--登陆密码--}}
                     <div class="form-group">
                         <label for="password">密码</label>
-                        <input type="password" name="password" id="password" class="form-control" value="{{ old('password') }}">
+                        <input type="password" name="password" id="password" class="form-control"
+                               value="{{ old('password') }}">
                     </div>
+
+                    {{--记住我--}}
+                    <div class="checkbox">
+                        <label><input type="checkbox" name="remember">记住我</label>
+                    </div>
+
 
                     {{--提交按钮--}}
                     <button type="submit" class="btn btn-primary">登陆</button>
@@ -35,5 +42,5 @@
             </div>
         </div>
     </div>
-    
+
 @stop
