@@ -6,7 +6,7 @@
         <div class="panel panel-default">
             {{--标题--}}
             <div class="panel-heading">
-                <h1>注册表单</h1>
+                <h5>注册表单</h5>
             </div>
             {{--表单--}}
             <div class="panel-body">
