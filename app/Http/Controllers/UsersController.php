@@ -14,7 +14,7 @@ class UsersController extends Controller
     public function __construct()
     {
         $this->middleware('auth', [
-            'except' => ['show', 'create', 'store','index','confirmEmail']
+            'except' => ['show', 'create', 'store', 'index', 'confirmEmail']
         ]);
 
         $this->middleware('guest', [
@@ -31,7 +31,11 @@ class UsersController extends Controller
     // 显示用户个人信息界面
     public function show(User $user)
     {
-        return view('users.show', compact('user'));
+        $statuses = $user->statuses()
+            ->orderBy('created_at', 'desc')
+            ->paginate(30);
+
+        return view('users.show', compact('user','statuses'));
     }
 
     // 执行注册用户动作, 保存到数据库
@@ -89,15 +93,15 @@ class UsersController extends Controller
     public function index()
     {
         $users = User::paginate(10);
-        return view('users.index',compact('users'));
+        return view('users.index', compact('users'));
     }
 
     // 执行删除用户操作
     public function destroy(User $user)
     {
-        $this->authorize('destroy',$user);
+        $this->authorize('destroy', $user);
         $user->delete();
-        session()->flash('success','成功删除用户');
+        session()->flash('success', '成功删除用户');
         return back();
     }
 
@@ -108,7 +112,7 @@ class UsersController extends Controller
         $data = compact('user');
 //        $from = 'aufree@yousails.com';
 //        $name = 'Aufree';
-        $to = $user->email;
+        $to      = $user->email;
         $subject = "感谢注册 Sample 应用！请确认你的邮箱。";
 
         Mail::send($view, $data, function ($message) use ($to, $subject) {
@@ -119,14 +123,14 @@ class UsersController extends Controller
     // 接收注册验证信息, 完成账号激活
     public function confirmEmail($token)
     {
-        $user = User::where('activation_token',$token)->firstOrFail();
+        $user = User::where('activation_token', $token)->firstOrFail();
 
-        $user->activated = true;
+        $user->activated        = true;
         $user->activation_token = null;
         $user->save();
 
         Auth::login($user);
-        session()->flash('success','恭喜你, 激活成功');
+        session()->flash('success', '恭喜你, 激活成功');
         return redirect()->route('users.show', [$user]);
     }
 
