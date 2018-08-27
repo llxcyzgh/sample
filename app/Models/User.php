@@ -6,6 +6,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Notifications\ResetPassword;
 use Auth;
+//use App\Models\Status;
 
 class User extends Authenticatable
 {
@@ -59,7 +60,7 @@ class User extends Authenticatable
     {
         $user_ids = Auth::user()->followings->pluck('id')->toArray();
         array_push($user_ids,Auth::user()->id);
-        return Statuses::WhereIn('user_id',$user_ids)
+        return Status::WhereIn('user_id',$user_ids)
             ->with('user')
             ->orderBy('created_at', 'desc');
     }
